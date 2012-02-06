@@ -1,43 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-
-Execute this file to run the tests. The output should look like this:
-
-    Creating test database for alias 'default' ('/var/folders/5h/k46wfdmx35s3dx5rb83490540000gn/T/tmpwiMrdU/docfield-test.db')...
-    Destroying old test database 'default'...
-    Creating tables ...
-    Creating table auth_permission
-    Creating table auth_group_permissions
-    Creating table auth_group
-    Creating table auth_user_user_permissions
-    Creating table auth_user_groups
-    Creating table auth_user
-    Creating table django_content_type
-    Creating table django_session
-    Creating table django_site
-    Creating table django_admin_log
-    Creating table docfield_testmodel
-    Creating table docfield_testmicromanagermodel
-    Installing custom SQL ...
-    Installing indexes ...
-    No fixtures found.
-    test_EXPERIMENTAL_micromanager (docfield.tests.docfieldTests) ... ok
-    test_EXPERIMENTAL_micromanager_querysets (docfield.tests.docfieldTests) ... ok
-    test_automatic_docfield (docfield.tests.docfieldTests) ... ok
-    test_automatic_docfield_querysets (docfield.tests.docfieldTests) ... ok
-    test_manual_docfield (docfield.tests.docfieldTests) ... ok
-    test_manual_docfield_querysets (docfield.tests.docfieldTests) ... ok
-    test_slice_syntax (docfield.tests.docfieldTests) ... ok
-    Destroying test database for alias 'default' ('/var/folders/5h/k46wfdmx35s3dx5rb83490540000gn/T/tmpwiMrdU/docfield-test.db')...
-    Deleting test data: /var/folders/5h/k46wfdmx35s3dx5rb83490540000gn/T/tmpwiMrdU
-    
-    ----------------------------------------------------------------------
-    Ran 7 tests in 0.044s
-    
-    OK
-
-"""
+""" Execute this file to run the tests. """
 
 import settings as docfield_settings
 from django.conf import settings
