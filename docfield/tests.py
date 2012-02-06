@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
-""" Execute this file to run the tests. """
+"""
+
+Execute this file to run the tests. At the moment,
+they will have a freakout and halt unless a Couch
+instance is running on your default port and we can
+connect to it with impunity.
+
+"""
 
 import settings as docfield_settings
 from django.conf import settings
