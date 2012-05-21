@@ -133,13 +133,13 @@ class DocFieldTests(TestCase):
         setty = set(d[0] for d in TestCallableModelField.objects.all().values_list('doc'))
         benchley = [doc.keys() for doc in busbench.all_docs().all()]
         benchy = set(reduce(lambda dd,ee: dd+ee, benchley))
-        print "SETTY: "
-        pprint(setty)
-        print ""
+        #print "SETTY: "
+        #pprint(setty)
+        #print ""
         
-        print "BENCHY: "
-        pprint(benchley)
-        print ""
+        #print "BENCHY: "
+        #pprint(benchley)
+        #print ""
         
         self.assertNotEqual(
             setty,

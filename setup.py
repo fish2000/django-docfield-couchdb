@@ -1,19 +1,17 @@
 #/usr/bin/env python
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
 
-import sys, os
-sys.path.append(os.getcwd())
+name = 'docfield'
+long_name = 'django-docfield-couchdb'
+version = '0.1.1'
+packages = [name]
+description = "Django fields for representing CouchDB docs and more."
 
-import version
+keywords = [
+    'django','couchdb','json','NoSQL','database',
+    'utility','fields','models','trees','fields',
+]
 
-setup(
-    name='django-docfield-couchdb',
-    version='0.1.0',
-    description="Django fields for representing CouchDB docs and more.",
-    long_description="""
+long_description = """
     
     Django fields and other add-ons that represent key CouchDB data structures:
     
@@ -23,46 +21,52 @@ setup(
     
     And MORE! Coming soon of course. (next up, JSON diff views and widgets!)
     
-    """,
-    author=version.__author__,
+"""
+
+
+classifiers = [
+'Development Status :: 4 - Beta',
+    'Environment :: Web Environment',
+    'Environment :: Other Environment',
+    'Environment :: Plugins',
+    'Framework :: Django',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Topic :: Database',
+    'Topic :: Utilities',
+]
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+setup(
+
+    name=long_name, version=version, description=description,
+    long_description=long_description,
+    download_url=('http://github.com/fish2000/%s/zipball/master' % name),
+
+    author=u"Alexander Bohn",
     author_email='fish2000@gmail.com',
-    maintainer=version.__author__,
-    maintainer_email='fish2000@gmail.com',
-    license='BSD',
-    url='http://github.com/fish2000/django-docfield-couchdb/',
-    download_url='https://github.com/fish2000/django-docfield-couchdb/zipball/master',
-    keywords=[
-        'django',
-        'couchdb',
-        'json',
-        'NoSQL',
-        'database',
-        'utility',
-        'fields',
-        'models',
-        'trees',
-        'fields',
-    ],
+    url='http://github.com/fish2000/%s/' % name,
+    license='GPLv2',
+    keywords=', '.join(keywords),
+    platforms=['any'],
+
+    packages=[]+packages,
+    package_dir={},
+    package_data={},
     install_requires=[
-        'couchdbkit',
-        'simplejson',
-    ],
-    packages=[
-        'docfield',
-    ],
-    classifiers=[
-    'Development Status :: 4 - Beta',
-        'Environment :: Web Environment',
-        'Environment :: Other Environment',
-        'Environment :: Plugins',
-        'Framework :: Django',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'couchdbkit', 'simplejson'],
+
+    classifiers=classifiers+[
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Topic :: Database',
-        'Topic :: Utilities',
-    ]
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
+        'Programming Language :: Python :: 2.6'],
 )
 

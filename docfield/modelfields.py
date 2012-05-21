@@ -170,10 +170,7 @@ class CouchDocLocalField(JSONField):
         
     def to_couch(self, value, model_instance):
         
-        
-        print "CHECKING OUT DOC: %s" % value
-        
-        
+        #print "CHECKING OUT DOC: %s" % value
         if not value or value == "":
             value = {}
         
@@ -215,10 +212,7 @@ class CouchDocLocalField(JSONField):
         
         value['_id'] = _id
         
-        
-        print "DOC FIT FOR COUCH???: %s" % value
-        
-        
+        #print "DOC FIT FOR COUCH???: %s" % value
         return value
     
     def pre_save(self, model_instance, add):
@@ -229,8 +223,7 @@ class CouchDocLocalField(JSONField):
         
         setattr(model_instance, self.attname, value)
         
-        print "ABOUT TO SAVE DOC: %s" % value
-        
+        #print "ABOUT TO SAVE DOC: %s" % value
         self.couch_db.save_doc(value)
         return value
     
