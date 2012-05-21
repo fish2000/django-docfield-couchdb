@@ -1,7 +1,7 @@
 .DS_Store
 Icon*
 dist/
-django_signalqueue.egg-info/
+django_docfield_couchdb.egg-info/
 build/
 MANIFEST
 
