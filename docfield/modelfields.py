@@ -21,8 +21,18 @@ from django.utils.translation import ugettext_lazy as _
 
 COUCH_ID_LENGTH = 32
 
+class MixIntrospector(object):
+    
+    def south_field_triple(self):
+        """ Returns the field's module/classname pseudo-modulepath for South. """
+        from south.modelsinspector import introspector
+        field_class = "docfield.modelfields.%s" % self.__class__.__name__
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
+    
 
-class CouchID(models.Field):
+class CouchID(models.Field, MixIntrospector):
+    """ A field encapsulating a CouchDB document ID. """
     
     __metaclass__ = models.SubfieldBase
     description = _("CouchDB Document ID: 32-Character UUID String Hex-Encoded Representation")
@@ -70,6 +80,7 @@ class CouchID(models.Field):
         return self.to_python(value)
 
     def db_type(self, connection=None):
+        """ CouchID uses a native UUID datatype on PostgreSQL. """
         if connection and connection.vendor in ("postgresql",):
             return 'UUID'
         return 'CHAR(%s)' % (self.max_length,)
@@ -86,25 +97,18 @@ class CouchID(models.Field):
         defaults = { 'max_length': self.max_length, }
         defaults.update(kwargs)
         return super(CouchAutoField, self).formfield(**defaults)
-    
-    def south_field_triple(self):
-        """ Returns a suitable description of this field for South. """
-        from south.modelsinspector import introspector
-        field_class = "docfield.modelfields.CouchAutoField"
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
 
 
 class CouchAutoField(CouchID, models.AutoField):
     def __init__(self, *args, **kwargs):
-        kwargs['primary_key'] = True    # Always
+        kwargs['primary_key'] = True # Always
         super(CouchAutoField, self).__init__(*args, **kwargs)
     
     def get_internal_type(self):
         return "AutoField"
 
 
-class JSONField(models.TextField):
+class JSONField(models.TextField, MixIntrospector):
     """ JSONField is a TextField that stores Python tree values as JSON strings. """
 
     __metaclass__ = models.SubfieldBase
@@ -135,6 +139,9 @@ class JSONField(models.TextField):
     
 
 class CouchDocLocalField(JSONField):
+    """ A CouchDocLocalField behaves in a manner indistinguishable from
+    a JSONField, as far as Django application devs are concerned;
+    its data is seamlessly synced with a CouchDB doc (see below). """
     
     __metaclass__ = models.SubfieldBase
     description = _("")
@@ -182,7 +189,8 @@ class CouchDocLocalField(JSONField):
                 try:
                     value = json.loads(value)
                 except json.JSONDecodeError, err:
-                    msg = "Invalid string assigned to CouchDocLocalField: %s (%s)" % (value, err)
+                    msg = "Invalid string assigned to CouchDocLocalField: %s (%s)" % (
+                        value, err)
                     raise exceptions.ValidationError(msg)
         
         elif not isinstance(value, (dict, list)):
@@ -190,9 +198,9 @@ class CouchDocLocalField(JSONField):
                 value = value.to_python()
             elif hasattr(value, 'to_json'):
                 pass # couchdbkit API will deal w/ this
-            
             else:
-                msg = "Unserializable value assigned to CouchDocLocalField: %s (%s)" % (value, err)
+                msg = "Unserializable value assigned to CouchDocLocalField: %s (%s)" % (
+                    value, err)
                 raise exceptions.ValidationError(msg)
         
         doc_id = self.doc_id
@@ -234,4 +242,4 @@ class CouchDocLocalField(JSONField):
         if '_rev' in value:
             del value['_rev']
         return value
-        
+
