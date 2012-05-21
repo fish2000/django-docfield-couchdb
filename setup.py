@@ -2,7 +2,7 @@
 
 name = 'docfield'
 long_name = 'django-docfield-couchdb'
-version = '0.1.1'
+version = '0.1.2'
 packages = [name]
 description = "Django fields for representing CouchDB docs and more."
 
@@ -18,6 +18,7 @@ long_description = """
     *) Docs, which can authoratively reside in either Couch or your Django RDBMS
     *) Arbitrary JSON subtrees
     *) CouchDB _id and _rev identifiers
+    *) NEW in 1.1: an error-free setup.py install experience!
     
     And MORE! Coming soon of course. (next up, JSON diff views and widgets!)
     
