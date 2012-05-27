@@ -42,7 +42,7 @@ class CouchID(models.Field, MixIntrospector):
             getattr(settings, 'DEFAULT_COUCH', couchdbkit.Server()))
         
         kwargs['max_length'] = COUCH_ID_LENGTH
-        kwargs['editable'] = False      # NO TOUCHING!!
+        kwargs['editable'] = False  # NO TOUCHING!!
         kwargs['blank'] = True
         kwargs['unique'] = True
         
