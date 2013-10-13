@@ -144,7 +144,7 @@ class JSONField(models.TextField, MixIntrospector):
 
     def value_to_string(self, obj):
         """ Return unicode data (for now) suitable for serialization. """
-        return self.get_db_prep_value(self._get_val_from_obj(obj))
+        return self.get_db_prep_value(self._get_val_from_obj(obj), connection)
 
 
 class CouchDocLocalField(JSONField):
