@@ -11,7 +11,7 @@ Copyright (c) 2011 Objects In Space And Time, LLC. All rights reserved.
 import couchdbkit
 
 from django.conf import settings
-from django.db import models
+from django.db import models, connection
 from django.utils import simplejson as json
 from django.core import exceptions, validators
 from django.core.serializers.json import DjangoJSONEncoder
