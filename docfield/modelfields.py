@@ -8,9 +8,7 @@ Copyright (c) 2011 Objects In Space And Time, LLC. All rights reserved.
 
 """
 
-import types
 import couchdbkit
-import simplejson as json
 
 from django.conf import settings
 from django.db import models
@@ -21,6 +19,17 @@ from django.utils.translation import ugettext_lazy as _
 
 COUCH_ID_LENGTH = 32
 
+class JSONFieldEncoder(DjangoJSONEncoder):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('namedtuple_as_object', None)
+        kwargs.pop('use_decimal', None)
+        kwargs.pop('item_sort_key', None)
+        kwargs.pop('for_json', None)
+        kwargs.pop('bigint_as_string', None)
+        kwargs.pop('tuple_as_array', None)
+        kwargs.pop('ignore_nan', None)
+        DjangoJSONEncoder.__init__(self, *args, **kwargs)
+
 class MixIntrospector(object):
     
     def south_field_triple(self):
@@ -29,7 +38,7 @@ class MixIntrospector(object):
         field_class = "docfield.modelfields.%s" % self.__class__.__name__
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
-    
+
 
 class CouchID(models.Field, MixIntrospector):
     """ A field encapsulating a CouchDB document ID. """
@@ -130,13 +139,13 @@ class JSONField(models.TextField, MixIntrospector):
         if not value or value == "":
             return None
         if isinstance(value, (dict, list)):
-            value = json.dumps(value, cls=DjangoJSONEncoder)
+            value = json.dumps(value, cls=JSONFieldEncoder)
         return super(JSONField, self).get_db_prep_save(value, connection)
 
     def value_to_string(self, obj):
         """ Return unicode data (for now) suitable for serialization. """
         return self.get_db_prep_value(self._get_val_from_obj(obj))
-    
+
 
 class CouchDocLocalField(JSONField):
     """ A CouchDocLocalField behaves in a manner indistinguishable from
@@ -242,4 +251,3 @@ class CouchDocLocalField(JSONField):
         if '_rev' in value:
             del value['_rev']
         return value
-

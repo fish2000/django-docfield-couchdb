@@ -2,7 +2,7 @@
 
 name = 'docfield'
 long_name = 'django-docfield-couchdb'
-version = '0.1.2'
+version = '0.1.3'
 packages = [name]
 description = "Django fields for representing CouchDB docs and more."
 
