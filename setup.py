@@ -2,7 +2,7 @@
 
 name = 'docfield'
 long_name = 'django-docfield-couchdb'
-version = '0.2.1'
+version = '0.2.2'
 packages = [name]
 description = "Django fields for representing CouchDB docs and more."
 
@@ -20,7 +20,7 @@ long_description = """
     *) CouchDB _id and _rev identifiers
     *) NEW in 1.1: an error-free setup.py install experience!
     
-    And MORE! Coming soon of course. (next up, JSON diff views and widgets!)
+    And MORE!!! Coming soon of course.
     
 """
 
@@ -46,11 +46,11 @@ setup(
 
     name=long_name, version=version, description=description,
     long_description=long_description,
-    download_url=('http://github.com/fish2000/%s/zipball/master' % name),
+    download_url=('http://github.com/fish2000/django-docfield-couchdb/zipball/master'),
 
     author=u"Alexander Bohn",
     author_email='fish2000@gmail.com',
-    url='http://github.com/fish2000/%s/' % name,
+    url='http://github.com/fish2000/django-docfield-couchdb/',
     license='GPLv2',
     keywords=', '.join(keywords),
     platforms=['any'],
