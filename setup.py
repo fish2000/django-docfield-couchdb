@@ -46,11 +46,11 @@ setup(
 
     name=long_name, version=version, description=description,
     long_description=long_description,
-    download_url=('http://github.com/fish2000/django-docfield-couchdb/zipball/master'),
+    download_url=('http://github.com/fish2000/%s/zipball/master' % long_name),
 
     author=u"Alexander Bohn",
     author_email='fish2000@gmail.com',
-    url='http://github.com/fish2000/django-docfield-couchdb/',
+    url='http://github.com/fish2000/%s' % long_name,
     license='GPLv2',
     keywords=', '.join(keywords),
     platforms=['any'],
