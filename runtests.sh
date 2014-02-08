@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export DJANGO_SETTINGS_MODULE="docfield.settings"
+
 echo "+ Launching CouchDB instance ..."
 couchdb -n -b -p ./couchdb.pid
 
