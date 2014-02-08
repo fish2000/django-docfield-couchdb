@@ -60,7 +60,7 @@ setup(
     packages=[]+packages,
     package_dir={},
     package_data={},
-    install_requires=['couchdbkit'],
+    install_requires=['django-delegate', 'couchdbkit'],
 
     classifiers=classifiers+[
         'License :: OSI Approved :: GNU General Public License (GPL)',
