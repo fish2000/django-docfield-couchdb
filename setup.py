@@ -59,7 +59,7 @@ setup(
     package_dir={},
     package_data={},
     install_requires=[
-        'couchdbkit', 'simplejson'],
+        'couchdbkit'],
 
     classifiers=classifiers+[
         'License :: OSI Approved :: GNU General Public License (GPL)',
