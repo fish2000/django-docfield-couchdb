@@ -4,12 +4,12 @@ python:
   - 2.7
   - pypy
 
+services:
+  - couchdb
+
 install:
   - "pip install ."
   - "pip install -U -r requirements.txt"
   - "pip install django==1.6.1"
-
-before_script:
-  - curl -X PUT localhost:5984/test_docfield
 
 script: "./runtests.sh"
