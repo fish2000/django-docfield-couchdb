@@ -13,7 +13,9 @@ curl -s -X PUT localhost:5984/test_docfield > /dev/null \
     || (echo "+ Launching CouchDB instance ..." && couchdb -n -b -p ./couchdb.pid)
 
 echo "+ Running Python tests ..."
-/usr/bin/env python docfield/run.py
+/usr/bin/env python docfield/run.py || \
+    (echo "FATAL: Python tests exited with non-zero" && \
+        exit 1)
 
 COUCH_PID="./couchdb.pid"
 
