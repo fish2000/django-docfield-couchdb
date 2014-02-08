@@ -23,7 +23,6 @@ if [ -r $COUCH_PID ]; then
     COUCH=`cat $COUCH_PID`
     echo "+ Killing couch instance: ${COUCH}"
     kill -9 $COUCH
-    #killall beam.smp
 
     echo "+ Cleaning up ..."
     rm -f couchdb.pid
