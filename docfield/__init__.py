@@ -2,5 +2,5 @@ from .modelfields import (
     CouchID,
     CouchAutoField,
     JSONField,
-    CouchDocLocalField
-)
+    CouchDocLocalField)
+import .settings as settings
