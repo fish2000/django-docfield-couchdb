@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fish2000/django-docfield-couchdb.png?branch=master)](https://travis-ci.org/fish2000/django-docfield-couchdb)
+
 django-docfield-couchdb
 =======================
 
