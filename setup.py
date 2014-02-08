@@ -2,7 +2,7 @@
 
 name = 'docfield'
 long_name = 'django-docfield-couchdb'
-version = '0.2.3'
+version = '0.2.4'
 packages = [name]
 description = "Django fields for representing CouchDB docs and more."
 
@@ -26,7 +26,7 @@ long_description = """
 
 
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Environment :: Web Environment',
     'Environment :: Other Environment',
     'Environment :: Plugins',
@@ -71,6 +71,6 @@ setup(
         'Operating System :: Unix',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: pypy'],
+        'Programming Language :: Python :: Implementation :: PyPy'],
 )
 
