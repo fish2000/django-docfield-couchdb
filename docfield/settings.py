@@ -77,6 +77,10 @@ INSTALLED_APPS = (
     'docfield',
 )
 
+import couchdbkit
+DEFAULT_COUCH = couchdbkit.Server()
+DEFAULT_COUCH_DB = DEFAULT_COUCH.get_or_create_db('test_docfield')
+
 # Logging Configuration
 import logging
 LOGGING = dict(

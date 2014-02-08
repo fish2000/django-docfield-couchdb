@@ -17,9 +17,7 @@ if not settings.configured:
 from django.test import TestCase
 from django.db import models
 from delegate import DelegateManager, DelegateQuerySet, delegate
-from docfield.modelfields import CouchAutoField, JSONField, CouchDocLocalField
-
-from pprint import pprint
+from docfield.modelfields import CouchID, CouchAutoField, CouchDocLocalField
 
 if __name__ == "__main__":
     from django.core.management import call_command
@@ -49,29 +47,48 @@ class ManualDocFieldTestQuerySet(models.query.QuerySet):
     def iheardyoulike(self, whatiheardyoulike):
         return self.filter(doc__icontains=whatiheardyoulike)
 
+class NormalDjangoPrimaryKeyFieldTestQuerySet(DelegateQuerySet):
+    def yodogg(self):
+        return self.filter(doc__icontains="yo dogg")
+    def iheardyoulike(self, whatiheardyoulike):
+        return self.filter(doc__icontains=whatiheardyoulike)
+
 class AutoDocFieldTestManager(DelegateManager):
     __queryset__ = AutoDocFieldTestQuerySet
 
 class ManualDocFieldTestManager(DelegateManager):
     __queryset__ = ManualDocFieldTestQuerySet
 
+class NormalDjangoPrimaryKeyFieldTestManager(DelegateManager):
+    __queryset__ = NormalDjangoPrimaryKeyFieldTestQuerySet
+
 class TestModel(models.Model):
     objects = AutoDocFieldTestManager()
     other_objects = ManualDocFieldTestManager()
-    id = CouchAutoField(couch=sofaset,
-        primary_key=True)
-    doc = CouchDocLocalField(couch=sofaset, couch_db=busbench,
-        doc_id='pk',
+    id = CouchAutoField(couch=sofaset)
+    doc = CouchDocLocalField(
+        couch=sofaset,
+        couch_db=busbench,
         blank=False, null=False, unique=False,
         default={'yodogg': "Test Model Instance."})
 
 class TestCallableModelField(models.Model):
-    id = CouchAutoField(couch=sofaset,
-        primary_key=True)
-    doc = CouchDocLocalField(couch=sofaset, couch_db=busbench,
-        doc_id=lambda tcm: tcm.pk and tcm.pk or sofaset.next_uuid(),
+    id = CouchAutoField(couch=sofaset)
+    doc = CouchDocLocalField(
+        couch=sofaset,
+        couch_db=busbench,
+        doc_id=lambda model_obj: model_obj.pk or sofaset.next_uuid(),
         blank=False, null=False, unique=False,
         default={'yodogg': "Test Callable Model Field."})
+
+class TestModelWithNormalDjangoPrimaryKey(models.Model):
+    """ This also tests the default database handles (per settings.py) """
+    objects = NormalDjangoPrimaryKeyFieldTestManager()
+    couch_id = CouchID()
+    doc = CouchDocLocalField(
+        doc_id='couch_id',
+        blank=False, null=False, unique=False,
+        default={'yodogg': "Test Model Instance."})
 
 class DocFieldTests(TestCase):
     def setUp(self):
@@ -84,6 +101,10 @@ class DocFieldTests(TestCase):
             TestCallableModelField(doc=dict(yodogg='hello, dogg.', fuckyes='eat shit.')),
             TestCallableModelField(),
             TestCallableModelField(),
+            TestModelWithNormalDjangoPrimaryKey(doc=dict(yodogg='hello, dogg.', ooga='booga')),
+            TestModelWithNormalDjangoPrimaryKey(doc=dict(yodogg='hello, dogg.', fuckyes='eat shit.')),
+            TestModelWithNormalDjangoPrimaryKey(),
+            TestModelWithNormalDjangoPrimaryKey(),
         ]
         for instance in self.instances:
             instance.save()
@@ -91,6 +112,7 @@ class DocFieldTests(TestCase):
     def tearDown(self):
         TestModel.objects.all().delete()
         TestCallableModelField.objects.all().delete()
+        TestModelWithNormalDjangoPrimaryKey.objects.all().delete()
         busbench.delete_docs(
             busbench.all_docs().all())
     
@@ -129,18 +151,26 @@ class DocFieldTests(TestCase):
             TestModel.objects.all().yodogg(),
             comparator)
     
+    def test_non_primary_key_couchid_field(self):
+        comparator = [repr(q) for q in TestModelWithNormalDjangoPrimaryKey.objects.all().yodogg()]
+        self.assertQuerysetEqual(
+            TestModelWithNormalDjangoPrimaryKey.objects.yodogg(),
+            comparator)
+        self.assertQuerysetEqual(
+            TestModelWithNormalDjangoPrimaryKey.objects.all().yodogg(),
+            comparator)
+        for comparible in comparator:
+            self.assertTrue(comparible.couch_id is not None)
+    
     def test_callable_fields(self):
-        setty = set(d[0] for d in TestCallableModelField.objects.all().values_list('doc'))
-        benchley = [doc.keys() for doc in busbench.all_docs().all()]
-        benchy = set(reduce(lambda dd,ee: dd+ee, benchley))
-        #print "SETTY: "
-        #pprint(setty)
-        #print ""
+        import json
         
-        #print "BENCHY: "
-        #pprint(benchley)
-        #print ""
+        set_models = set(json.loads(d['doc'])['_id'] for d in TestModel.objects.all().values('doc'))
+        set_callable_field_models = set(json.loads(d['doc'])['_id'] for d in TestCallableModelField.objects.all().values('doc'))
+        set_non_pk_models = set(json.loads(d['doc'])['_id'] for d in TestModelWithNormalDjangoPrimaryKey.objects.all().values('doc'))
+        couchdb_set = set([doc['id'] for doc in busbench.all_docs().all() if doc.get('id', None)])
         
-        self.assertNotEqual(
-            setty,
-            benchy)
+        self.assertTrue(len(couchdb_set) > 0)
+        self.assertTrue(set_models.issubset(couchdb_set))
+        self.assertTrue(set_callable_field_models.issubset(couchdb_set))
+        self.assertTrue(set_non_pk_models.issubset(couchdb_set))

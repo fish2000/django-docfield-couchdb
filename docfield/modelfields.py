@@ -9,10 +9,10 @@ Copyright (c) 2011 Objects In Space And Time, LLC. All rights reserved.
 """
 
 import couchdbkit
+import json
 
 from django.conf import settings
 from django.db import models, connection
-from django.utils import simplejson as json
 from django.core import exceptions, validators
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.translation import ugettext_lazy as _
@@ -59,27 +59,27 @@ class CouchID(models.Field, MixIntrospector):
         self.validators.append(validators.MaxLengthValidator(self.max_length))
     
     def to_python(self, value):
-        if value is None:
+        if not value:
             return self.couch.next_uuid()
         if len(str(value)) == COUCH_ID_LENGTH:
             return str(value)
         else:
-            msg = self.error_messages['invalid'] % (
+            msg = "Invalid Docfield Value: %s" % (
                 "%s value length should be %s instead of %s" % (
                     self.__class__.__name__,
                     COUCH_ID_LENGTH, len(str(value))))
             raise exceptions.ValidationError(msg)
-    
+    '''
     def validate(self, value, model_instance):
         if len(str(value)) == COUCH_ID_LENGTH:
             return super(CouchID, self).validate(value, model_instance)
         else:
-            msg = self.error_messages['invalid'] % (
+            msg = "Invalid Docfield Value: %s" % (
                 "%s value length should be %s instead of %s" % (
                     self.__class__.__name__,
                     COUCH_ID_LENGTH, len(str(value))))
             raise exceptions.ValidationError(msg)
-    
+    '''
     def get_internal_type(self):
         return "CharField"
     
@@ -186,12 +186,11 @@ class CouchDocLocalField(JSONField):
         
     def to_couch(self, value, model_instance):
         
-        #print "CHECKING OUT DOC: %s" % value
         if not value or value == "":
             value = {}
         
         elif isinstance(value, (unicode, basestring)):
-            # has it been pre-JSONified? round-trip it to check.
+            # has it been pre-JSONified?... round-trip it to check:
             try:
                 value = eval(value)
             except (SyntaxError, ValueError):
@@ -217,7 +216,7 @@ class CouchDocLocalField(JSONField):
         
         if callable(doc_id):
             _id = doc_id(model_instance)
-        else:
+        elif doc_id:
             _id = getattr(model_instance, doc_id, doc_id)
         if not _id:
             if isinstance(value, dict):
@@ -229,7 +228,6 @@ class CouchDocLocalField(JSONField):
         
         value['_id'] = _id
         
-        #print "DOC FIT FOR COUCH???: %s" % value
         return value
     
     def pre_save(self, model_instance, add):
@@ -240,7 +238,6 @@ class CouchDocLocalField(JSONField):
         
         setattr(model_instance, self.attname, value)
         
-        #print "ABOUT TO SAVE DOC: %s" % value
         self.couch_db.save_doc(value)
         return value
     
