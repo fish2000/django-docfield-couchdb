@@ -1,7 +1,8 @@
+exclude *.pyc *~ .DS_Store
 #include .gitignore
+include README.md
 include requirements.txt
 include runtests.sh
-include README.md
 include setup.py
 recursive-include docfield *
-exclude *.pyc *~ .DS_Store
+recursive-exclude docfield *.pyc *~ .DS_Store
