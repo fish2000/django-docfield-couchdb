@@ -1,5 +1,5 @@
 
-from docfield import settings as docfield_settings
+import settings as docfield_settings
 from django.conf import settings
 if not settings.configured:
     settings.configure(**docfield_settings.__dict__)
