@@ -8,7 +8,6 @@ services:
   - couchdb
 
 install:
-  - "pip install ."
   - "pip install -U -r requirements.txt"
   - "pip install django==1.6.1"
 
