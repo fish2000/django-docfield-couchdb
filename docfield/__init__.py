@@ -3,4 +3,4 @@ from .modelfields import (
     CouchAutoField,
     JSONField,
     CouchDocLocalField)
-import .settings as settings
+import settings
