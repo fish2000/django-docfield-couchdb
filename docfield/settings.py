@@ -32,6 +32,7 @@ MEDIA_URL = '/face/'
 STATIC_ROOT = os.path.join(tempdata, 'static', 'admin')[0]
 STATIC_URL = '/staticfiles/'
 ADMIN_MEDIA_PREFIX = '/admin-media/'
+SECRET_KEY = "f1fd157f2f872138e9d23e2064a91481f1fd157f2f872138e9d23e2064a91481"
 
 TEMPLATE_DIRS = (
     os.path.join(approot, 'templates'),

@@ -15,6 +15,9 @@ MANIFEST
 *.so
 *.dmg
 *.jar
+*.pid
+*.stdout
+*.stderr
 
 .hg/
 *.hg

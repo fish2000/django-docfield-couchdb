@@ -19,17 +19,6 @@ from django.db import models
 from delegate import DelegateManager, DelegateQuerySet, delegate
 from docfield.modelfields import CouchID, CouchAutoField, CouchDocLocalField
 
-if __name__ == "__main__":
-    from django.core.management import call_command
-    call_command('test', 'docfield',
-        settings='docfield.settings',
-        interactive=False, traceback=True, verbosity=2)
-    import shutil, sys
-    tempdata = docfield_settings.tempdata
-    print "Deleting test data: %s" % tempdata
-    shutil.rmtree(tempdata)
-    sys.exit(0)
-
 import couchdbkit
 sofaset = couchdbkit.Server()
 busbench = sofaset.get_or_create_db('test_docfield')

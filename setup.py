@@ -26,7 +26,7 @@ long_description = """
 
 
 classifiers = [
-'Development Status :: 4 - Beta',
+    'Development Status :: 4 - Beta',
     'Environment :: Web Environment',
     'Environment :: Other Environment',
     'Environment :: Plugins',
@@ -54,12 +54,13 @@ setup(
     license='GPLv2',
     keywords=', '.join(keywords),
     platforms=['any'],
-
+    
+    include_package_data=True,
+    
     packages=[]+packages,
     package_dir={},
     package_data={},
-    install_requires=[
-        'couchdbkit'],
+    install_requires=['couchdbkit'],
 
     classifiers=classifiers+[
         'License :: OSI Approved :: GNU General Public License (GPL)',
