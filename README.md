@@ -12,3 +12,5 @@ Django fields and other add-ons that represent key CouchDB data structures:
 * NEW in 1.1: an error-free setup.py install experience!
 
 And MORE!!! Coming soon of course.
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fish2000/django-docfield-couchdb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
